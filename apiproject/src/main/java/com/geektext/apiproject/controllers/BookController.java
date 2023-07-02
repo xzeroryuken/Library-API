@@ -23,6 +23,9 @@ public class BookController {
     @Autowired
     private BookRepository bookRepository;
 
+    public class bookCreateRequest {
+
+    }
     @PostMapping
     public ResponseEntity<?> createBook(@Valid @RequestBody Book book, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

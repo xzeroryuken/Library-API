@@ -1,5 +1,6 @@
 package com.geektext.apiproject.controllers;
 
+import com.geektext.apiproject.ErrorResponse;
 import com.geektext.apiproject.models.User;
 import com.geektext.apiproject.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -14,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -32,11 +36,28 @@ public class UserController {
                     .stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .collect(Collectors.toList());
-            return ResponseEntity.badRequest().body(errors);
+
+            ErrorResponse errorResponse = new ErrorResponse();
+            errorResponse.setErrorCode("VALIDATION_ERROR");
+            errorResponse.setErrorMessage("Invalid input fields");
+            errorResponse.setErrors(errors);
+
+            return ResponseEntity.badRequest().body(errorResponse);
         }
+
+        String username = user.getUsername();
+        String password = user.getPassword();
+        String role = (isAdminUser(username, password)) ? "ADMIN" : "USER";
+        Set<String> roles = new HashSet<>();
+        roles.add(role);
+        user.setRoles(roles);
 
         User createdUser = userRepository.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    }
+
+    public boolean isAdminUser(String username, String password) {
+        return username.equals("admin") && password.equals("Denji123");
     }
 
 }
