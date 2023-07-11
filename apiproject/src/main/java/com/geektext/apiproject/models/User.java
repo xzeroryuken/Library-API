@@ -14,32 +14,29 @@ import java.util.Set;
 @Document
 @Data
 public class User {
+    @Id
+    private Long id;
 
     @Size(min = 8, max = 20)
     @NotEmpty(message = "Username must not be empty")
-    @Id
-    public final String username;
+    private final String username;
 
     @Size(min = 8, max = 20)
     @NotEmpty(message = "Password must not be empty")
-    public final String password;
+    private final String password;
 
     @Size(max = 50)
     @Nullable
-    public final String name;
+    private final String name;
 
     @Email
     @Size(max = 100)
     @Nullable
-    public final String email;
+    private final String email;
 
     @Pattern(regexp = "\\d+\\s+[A-Za-z]+\\s+[A-za-z]+")
     @Nullable
-    public final String address;
-
-    @NotEmpty(message = "Roles must not be empty")
-    private Set<String> roles;
-
+    private final String address;
 }
 
 

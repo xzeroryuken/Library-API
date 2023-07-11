@@ -26,21 +26,6 @@ public class AuthorController {
     @Autowired
     BookRepository bookRepository;
 
-    @PostMapping
-    public ResponseEntity<?> createAuthor(@Valid @RequestBody Author author, BindingResult bindingResult) {
-        // Checks for validation errors and binds it to a string to return as an error message.
-        if (bindingResult.hasErrors()) {
-            List<String> errors = bindingResult.getAllErrors()
-                    .stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.toList());
-            return ResponseEntity.badRequest().body(errors);
-        }
-        // Creates Author if there are no validation errors.
-        Author createdAuthor = authorRepository.save(author);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdAuthor);
-
-    }
     @GetMapping
     public List<Author> getAuthors() {
         return authorRepository.findAll();

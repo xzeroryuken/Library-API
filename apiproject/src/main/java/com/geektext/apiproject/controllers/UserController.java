@@ -28,7 +28,6 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-
     @PostMapping
     public ResponseEntity<?> createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -45,19 +44,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(errorResponse);
         }
 
-        String username = user.getUsername();
-        String password = user.getPassword();
-        String role = (isAdminUser(username, password)) ? "ADMIN" : "USER";
-        Set<String> roles = new HashSet<>();
-        roles.add(role);
-        user.setRoles(roles);
-
         User createdUser = userRepository.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
-
-    public boolean isAdminUser(String username, String password) {
-        return username.equals("admin") && password.equals("Denji123");
-    }
-
 }

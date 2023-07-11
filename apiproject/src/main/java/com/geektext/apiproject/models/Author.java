@@ -13,7 +13,7 @@ import java.util.UUID;
 @Document(collection = "authors")
 public class Author {
     @Id
-    public String id;
+    private String id;
 
     @Size(max = 50)
     @NotEmpty(message = "First Name must not be empty")
